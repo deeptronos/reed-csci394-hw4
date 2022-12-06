@@ -40,7 +40,7 @@
 // houses the lexer and parser (each written using Flex and Bison).
 // See the .hh file for details on it, and see the methods below.
 //
-// * * * * * 
+// * * * * *
 //
 // Some utilities for extracting information from the command line.
 //
@@ -107,6 +107,7 @@ void DWISLPY::Driver::run(void) {
 //
 void DWISLPY::Driver::check(void) {
     program->chck();
+    main->chck();
 }
 
 // dump
@@ -123,12 +124,12 @@ void DWISLPY::Driver::dump(bool pretty) {
 }
 
 
-// * * * * * 
+// * * * * *
 //
 // main - the DWISLPY interpreter
 //
 int main(int argc, char** argv) {
-    
+
     //
     // Process the command-line, including any flags.
     //
@@ -139,14 +140,14 @@ int main(int argc, char** argv) {
     }
     bool testing   = check_flag(argc,argv,"--test");
     char* filename = extract_filename(argc,argv);
-    
+
     if (filename) {
         DWISLPY::Driver dwislpy { filename };
         //
         // Catch DWISLPY errors.
         //
         try {
-            
+
             //
             // Parse.
             //
@@ -161,9 +162,9 @@ int main(int argc, char** argv) {
                 dwislpy.check();
                 dwislpy.run();
             }
-            
+
         } catch (DwislpyError se) {
-            
+
             if (testing) {
                 //
                 // If --test flag then just give "ERROR" message.
@@ -175,7 +176,7 @@ int main(int argc, char** argv) {
                 //
                 std::cerr << se.what() << std::endl;
             }
-        } 
+        }
     } else {
         //
         // Give some command line help.

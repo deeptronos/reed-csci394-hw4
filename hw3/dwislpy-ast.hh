@@ -391,6 +391,7 @@ public:
     Expn(Locn lo) : AST {lo} { }
     virtual ~Expn(void) = default;
     virtual Valu eval(const Defs& defs, const Ctxt& ctxt) const = 0;
+    virtual Type Expn::chck(Defs& defs, SymT& symt);
 };
 
 //
@@ -406,6 +407,7 @@ public:
     virtual Valu eval(const Defs& defs, const Ctxt& ctxt) const;
     virtual void output(std::ostream& os) const;
     virtual void dump(int level = 0) const;
+    virtual Type Expn::chck(Defs& defs, SymT& symt);
 };
 
 //
@@ -421,6 +423,7 @@ public:
     virtual Valu eval(const Defs& defs, const Ctxt& ctxt) const;
     virtual void output(std::ostream& os) const;
     virtual void dump(int level = 0) const;
+    virtual Type Expn::chck(Defs& defs, SymT& symt);
 };
 
 //
