@@ -53,7 +53,7 @@ std::string type_name(Type type) {
     }
     if (is_bool(type)) {
         return "bool";
-    } 
+    }
     if (is_None(type)) {
         return "None";
     }
@@ -103,16 +103,16 @@ Type type_of(Rtns rtns) {
 }
 
 Rtns Blck::chck(Rtns expd, Defs& defs, SymT& symt) {
-    
+
     // Scan through the statements and check their return behavior.
     for (Stmt_ptr stmt : stmts) {
-        
+
         // Check this statement.
         [[maybe_unused]]
         Rtns stmt_rtns = stmt->chck(expd, defs, symt);
 
         // Tosses out return behavior. Fix this !!!!
-    }            
+    }
 
     return expd; // Fix this!!
 }
@@ -143,11 +143,11 @@ Rtns Prnt::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
 }
 
 Rtns Ntro::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
-    return Rtns {Void {}}; // Fix this!!
+    return Rtns {Void {}}; // add the name to the symt (sym table) and check if type of expression is same as type of introduced thing
 }
 
 Rtns FRtn::chck(Rtns expd, Defs& defs, SymT& symt) {
-    // Doesn't check the sub-expression. Fix this!!!
+    // Doesn't check the sub-expression. Fix this!!!....
     return expd;
 }
 
@@ -208,63 +208,91 @@ Type Plus::chck(Defs& defs, SymT& symt) {
 }
 
 Type Mnus::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {IntTy {}}; 
-}
+    Type left_ty = left->chck(defs,symt);
+    Type rght_ty = rght->chck(defs,symt);
+    if (is_int(left_ty) && is_int(rght_ty)) {
+        return Type {IntTy {}};
+    } else if (is_str(left_ty) && is_str(rght_ty)) {
+        return Type {StrTy {}};
+    } else {
+        std::string msg = "Wrong operand types for minus.";
+        throw DwislpyError { where(), msg };
+    }
+  }
 
 Type Tmes::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {IntTy {}}; 
-}
+    Type left_ty = left->chck(defs,symt);
+    Type rght_ty = rght->chck(defs,symt);
+    if (is_int(left_ty) && is_int(rght_ty)) {
+        return Type {IntTy {}};
+    } else if (is_str(left_ty) && is_str(rght_ty)) {
+        return Type {StrTy {}};
+    } else {
+        std::string msg = "Wrong operand types for times.";
+        throw DwislpyError { where(), msg };
+    }
+  }
 
 Type IDiv::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {IntTy {}}; 
-}
+    Type left_ty = left->chck(defs,symt);
+    Type rght_ty = rght->chck(defs,symt);
+    if (is_int(left_ty) && is_int(rght_ty)) {
+        return Type {IntTy {}};
+    } else if (is_str(left_ty) && is_str(rght_ty)) {
+        return Type {StrTy {}};
+    } else {
+        std::string msg = "Wrong operand types for IDiv.";
+        throw DwislpyError { where(), msg };
+    }
+  }
 
 Type IMod::chck(Defs& defs, SymT& symt) {
+    Type left_ty = left->chck(defs,symt);
+    Type rght_ty = rght->chck(defs,symt);
+    if (is_int(left_ty) && is_int(rght_ty)) {
+        return Type {IntTy {}};
+    } else if (is_str(left_ty) && is_str(rght_ty)) {
+        return Type {StrTy {}};
+    } else {
+        std::string msg = "Wrong operand types for IMod.";
+        throw DwislpyError { where(), msg };
+    }
+  }
+
+Type Less::chck(Defs& defs, SymT& symt) { //chossing how to deal w boolean??
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {IntTy {}}; 
+    return Type {BoolTy {}};
 }
 
-Type Less::chck(Defs& defs, SymT& symt) {
+Type LsEq::chck(Defs& defs, SymT& symt) { // same as above
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {BoolTy {}}; 
-}
-
-Type LsEq::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}}; 
+    return Type {BoolTy {}};
 }
 
 Type Equl::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {BoolTy {}}; 
+    return Type {BoolTy {}};
 }
 
 Type And::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {BoolTy {}}; 
+    return Type {BoolTy {}};
 }
 
 Type Or::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {BoolTy {}}; 
+    return Type {BoolTy {}};
 }
 
 Type Not::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {BoolTy {}}; 
+    return Type {BoolTy {}};
 }
 
 Type Ltrl::chck([[maybe_unused]] Defs& defs, [[maybe_unused]] SymT& symt) {
@@ -276,7 +304,7 @@ Type Ltrl::chck([[maybe_unused]] Defs& defs, [[maybe_unused]] SymT& symt) {
         return Type {BoolTy {}};
     } else {
         return Type {NoneTy {}};
-    } 
+    }
 }
 
 Type Lkup::chck([[maybe_unused]] Defs& defs, SymT& symt) {
@@ -284,25 +312,23 @@ Type Lkup::chck([[maybe_unused]] Defs& defs, SymT& symt) {
         return symt.get_info(name)->type;
     } else {
         throw DwislpyError {where(), "Unknown identifier."};
-    } 
+    }
 }
 
 Type Inpt::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {StrTy {}}; 
+    return Type {StrTy {}};
 }
 
 Type IntC::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {IntTy {}}; 
+    return Type {IntTy {}};
 }
 
 Type StrC::chck(Defs& defs, SymT& symt) {
     // Doesn't check subexpressions.
     // Fix this!!
-    return Type {StrTy {}}; 
+    return Type {StrTy {}};
 }
 
 

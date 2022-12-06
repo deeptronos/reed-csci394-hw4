@@ -34,7 +34,7 @@ typedef std::shared_ptr<std::istream> istream_ptr;
 
 /*
  * class DWISLPY::Driver
- * 
+ *
  * Used by `main` to invoke the interpreter components. Also used by
  * the Bison code to set up the AST as a result of the parse.
  *
@@ -50,7 +50,7 @@ typedef std::shared_ptr<std::istream> istream_ptr;
  */
 
 namespace DWISLPY {
-    
+
     class Driver {
     public:
         Driver(std::string filename);
@@ -68,4 +68,4 @@ namespace DWISLPY {
 
 }
 
-#endif 
+#endif

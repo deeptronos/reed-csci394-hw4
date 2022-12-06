@@ -1,14 +1,15 @@
 %skeleton "lalr1.cc"
 %require  "3.0"
-%debug 
-%defines 
+%debug
+%defines
 %define api.namespace {DWISLPY}
 %define api.parser.class {Parser}
 %define parse.error verbose
-    
+
 %code requires{
-    
+
     #include "dwislpy-ast.hh"
+    #include "dwislpy-check.hh"
     #include "dwislpy-check.hh"
 
     namespace DWISLPY {
@@ -22,16 +23,16 @@
 
 %parse-param { Lexer  &lexer }
 %parse-param { Driver &main  }
-    
+
 %code{
 
     #include <sstream>
-    #include "dwislpy-util.hh"    
+    #include "dwislpy-util.hh"
     #include "dwislpy-main.hh"
 
     #undef yylex
     #define yylex lexer.yylex
-    
+
 }
 
 
@@ -41,7 +42,7 @@
 
 %locations
 
-%token               EOFL  0  
+%token               EOFL  0
 %token               EOLN
 %token               INDT
 %token               DEDT
@@ -69,7 +70,7 @@
 %token               LSEQ "<="
 %token               LESS "<"
 %token               EQUL "=="
-%token               LPAR "(" 
+%token               LPAR "("
 %token               RPAR ")"
 %token               CMMA ","
 %token               COLN ":"
@@ -98,7 +99,7 @@
 
 %left PLUS MNUS;
 %left TMES IMOD IDIV;
-    
+
 main:
   prgm {
       main.set($1);
@@ -108,12 +109,12 @@ main:
 prgm:
   blck {
       Defs ds { };
-      Blck_ptr b = $1; 
+      Blck_ptr b = $1;
       $$ = Prgm_ptr { new Prgm {ds, b, b->where()} };
-  }   
+  }
 | defs blck {
       Defs     ds = $1;
-      Blck_ptr b  = $2; 
+      Blck_ptr b  = $2;
       $$ = Prgm_ptr { new Prgm {ds, b, b->where()} };
   }
 ;
@@ -136,11 +137,11 @@ defn:
   DEFN NAME LPAR RPAR ARRW type COLN EOLN nest {
     SymT ps { };
     $$ = Defn_ptr { new Defn {$2, ps, $6, $9, lexer.locate(@1)} };
-  }    
+  }
 | DEFN NAME LPAR RPAR COLN EOLN nest {
     SymT ps { };
     $$ = Defn_ptr { new Defn {$2, ps, NoneTy {}, $7, lexer.locate(@1)} };
-  }    
+  }
 | DEFN NAME LPAR fmls RPAR ARRW type COLN EOLN nest {
     $$ = Defn_ptr { new Defn {$2, $4, $7, $10, lexer.locate(@1)} };
   }
@@ -176,7 +177,7 @@ type:
     $$ = NoneTy {};
   }
 ;
-        
+
 nest:
   INDT blck DEDT {
     $$ = $2;
@@ -202,8 +203,8 @@ stms:
       $$ = ss;
   }
 ;
-  
-stmt: 
+
+stmt:
   NAME COLN type ASGN expn EOLN {
       $$ = Ntro_ptr { new Ntro {$1,$3,$5,lexer.locate(@2)} };
   }
@@ -243,7 +244,7 @@ exps:
     $$ = ps;
   }
 ;
-    
+
 expn:
   expn PLUS expn {
       $$ = Plus_ptr { new Plus {$1,$3,lexer.locate(@2)} };
@@ -274,7 +275,7 @@ expn:
   }
 | NONE {
       $$ = Ltrl_ptr { new Ltrl {Valu {None},lexer.locate(@1)} };
-  }    
+  }
 | INPT LPAR expn RPAR {
       $$ = Inpt_ptr { new Inpt {$3,lexer.locate(@1)} };
   }
@@ -300,7 +301,7 @@ expn:
 ;
 
 %%
-       
+
 void DWISLPY::Parser::error(const location_type &loc, const std::string &msg) {
     throw DwislpyError { lexer.locate(loc), msg };
 }
