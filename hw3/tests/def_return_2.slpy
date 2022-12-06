@@ -1,0 +1,10 @@
+print("Evaluate def:")
+
+
+def fxn(argu):
+    a = argu
+    return a
+
+argg = 1
+r = fxn(argg)
+print(r == argg)

@@ -1,0 +1,7 @@
+print("Increment 15 by 1:")
+val = 15
+val += 1
+print(val)
+print("Increment 16 by 7:")
+val += 7
+print(val)

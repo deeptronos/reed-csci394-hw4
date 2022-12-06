@@ -1,0 +1,6 @@
+print("Evaluate if/else statement:  ")
+a = 6
+if a == 7:
+    print("Failure")
+else:
+    print("Success")

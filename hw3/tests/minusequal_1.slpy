@@ -1,0 +1,7 @@
+print("Decrement 16 by 1:")
+val = 16
+val -= 1
+print(val)
+print("Decrement 15 by 7:")
+val -= 7
+print(val)

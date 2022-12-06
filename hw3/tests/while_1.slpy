@@ -1,0 +1,7 @@
+print("Evaluate while for True:")
+a = 0
+while (a < 5):
+    print("iteration")
+    a = a + 1
+
+print("Success")

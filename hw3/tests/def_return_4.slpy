@@ -1,0 +1,21 @@
+print("Evaluate def w/ three arguments:")
+
+
+def fxn(argu1, argu2, argu3): # argu1: number, argu2: bool, argu3: string
+    a = argu1
+    b = argu2
+    c = argu3
+    print("fxn: argu1:")
+    print(argu1)
+    print("fxn: argu2:")
+    print(argu2)
+    print("fxn: argu3:")
+    print(argu3)
+
+    return
+
+argg1 = 1
+argg2 = True
+argg3 = "Bipp!"
+
+r = fxn(argg1, argg2, argg3)

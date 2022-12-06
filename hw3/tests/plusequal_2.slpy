@@ -1,0 +1,4 @@
+val = 32
+print("Increment 32 by 12:")
+val += 12
+print(val)

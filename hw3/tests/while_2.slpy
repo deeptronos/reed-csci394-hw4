@@ -1,0 +1,8 @@
+print("Evaluate while for False:")
+a = 0
+while (a > 5):
+    print("iteration (Failure)")
+    a = a + 1
+
+if a == 0:
+    print("Success")

@@ -1,0 +1,4 @@
+print("Evaluate if statement:  ")
+a = 6
+if a == 6:
+    print("Success")

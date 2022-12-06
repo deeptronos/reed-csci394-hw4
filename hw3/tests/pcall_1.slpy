@@ -1,0 +1,4 @@
+print("Evaluate passing print() multiple arguments:")
+a = 1
+b = 12
+print("Result - ", a, b, 2)

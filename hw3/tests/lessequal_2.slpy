@@ -1,0 +1,5 @@
+a = 16
+b = 16
+print("Evaluate 16 <= 16:")
+r = b <= a
+print(r)

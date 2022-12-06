@@ -1,0 +1,4 @@
+a = False
+b = not a
+print("Evaluate not False:")
+print(b)

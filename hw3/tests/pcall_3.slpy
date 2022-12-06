@@ -1,0 +1,4 @@
+print("Evaluate passing print() multiple arguments of mixed type:")
+a = 16
+b = True
+print("Result - ", a, b, "string")

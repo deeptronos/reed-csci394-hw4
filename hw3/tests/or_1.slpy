@@ -1,0 +1,5 @@
+a1 = False
+a2 = False
+print("Result of False or False: ")
+re = a1 or a2
+print(re)

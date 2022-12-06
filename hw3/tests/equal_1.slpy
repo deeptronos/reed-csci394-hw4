@@ -1,0 +1,5 @@
+a = 1
+b = 2
+print("Evaluate 1 == 2:")
+r = a == b
+print(r)
