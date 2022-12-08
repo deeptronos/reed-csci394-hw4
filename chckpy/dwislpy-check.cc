@@ -143,11 +143,17 @@ Rtns Prnt::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
 }
 
 Rtns Ntro::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
-    return Rtns {Void {}}; // add the name to the symt (sym table) and check if type of expression is same as type of introduced thing
+
+	// add the name to the symt (sym table)
+	symt.add_locl(name);
+	// and check if type of expression is same as type of introduced thing
+	if(type != expn->chck(defs,symt)){
+		throw DwislpyError { where(), "Type mismatch: Expression type is inconsistent with introduced variable type." };
+	}
+    return Rtns {Void {}};
 }
 
 Rtns FRtn::chck(Rtns expd, Defs& defs, SymT& symt) { // Function return
-    // Doesn't check the sub-expression. Fix this!!!....
 	Type subexp_ty = expn->chck(defs, symt);
 	Type expd_ty = type_of(expd);
 	if(subexp_ty != expd_ty){
