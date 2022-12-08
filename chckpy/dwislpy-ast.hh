@@ -402,12 +402,21 @@ public:
 //   Inpt - obtains a string of input (after output of a prompt)
 //   IntC - converts a value to an integer value
 //   StrC - converts a value to a string value
+//   Less
+//   LsEq
+//   Equl
+//   And
+//   Or
+//   Not
+//	 FCll
+//
 //
 // These each support the methods:
 //
 //  * eval(ctxt): evaluate the expression; return its result
 //  * output(os): output formatted DwiSlpy code of the expression.
 //  * dump: output the syntax tree of the expression
+//	* chck()
 //
 class Expn : public AST {
 public:

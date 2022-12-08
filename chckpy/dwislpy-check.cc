@@ -260,38 +260,97 @@ Type IMod::chck(Defs& defs, SymT& symt) {
   }
 
 Type Less::chck(Defs& defs, SymT& symt) { //chossing how to deal w boolean??
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}};
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		//return Type {IntTy {}};
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		//return Type{StrTy{}};
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) { // does this suffice for dealing with bools?
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for Less.";
+		throw DwislpyError { where(), msg };
+	}
 }
 
 Type LsEq::chck(Defs& defs, SymT& symt) { // same as above
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}};
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		//return Type {IntTy {}};
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		//return Type{StrTy{}};
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) {
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for LessEquals check.";
+		throw DwislpyError { where(), msg };
+	}
 }
 
 Type Equl::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}};
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) {
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for Equals check.";
+		throw DwislpyError { where(), msg };
+	}
 }
 
 Type And::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}};
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) {
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for And check.";
+		throw DwislpyError { where(), msg };
+	}
 }
 
 Type Or::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {BoolTy {}};
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) {
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for Or check.";
+		throw DwislpyError { where(), msg };
+	}
 }
 
 Type Not::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
+	Type left_ty = left->chck(defs,symt);
+	Type rght_ty = rght->chck(defs,symt);
+	if (is_int(left_ty) && is_int(rght_ty)) {
+		return Type {BoolTy {}};
+	} else if (is_str(left_ty) && is_str(rght_ty)) {
+		return Type {BoolTy {}};
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) { 
+		return Type {BoolTy {}};
+	} else {
+		std::string msg = "Wrong operand types for Not check.";
+		throw DwislpyError { where(), msg };
+	}
     return Type {BoolTy {}};
 }
 
@@ -316,18 +375,33 @@ Type Lkup::chck([[maybe_unused]] Defs& defs, SymT& symt) {
 }
 
 Type Inpt::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
-    return Type {StrTy {}};
+
+	Type subexpn_check  = expn->chck(defs, symt); // does this suffice to check subexpressions?
+		// Should I check the result of subexpn ???
+	if(is_str(subexpn_check)){ // Sure...
+		return Type {StrTy {}};
+	}else{
+		std::string msg = "Bad use of input().";
+		throw DwislpyError { where(), msg };
+	}
+
 }
 
 Type IntC::chck(Defs& defs, SymT& symt) {
-    return Type {IntTy {}};
+
+	Type subexpn_ty = expn->chck(defs, symt);
+	if(is_int(subexpn_ty) || is_bool(subexpn_ty)){
+		return Type {IntTy {}};
+	}else{
+		std::string msg = "Type Error: expected int or bool.";
+		throw DwislpyError { where(), msg };
+	}
+
 }
 
-Type StrC::chck(Defs& defs, SymT& symt) {
-    // Doesn't check subexpressions.
-    // Fix this!!
+Type StrC::chck(Defs& defs, SymT& symt) { // anything can convert to str
+
+	Type subexpn_check = expn->chck(defs, symt);
     return Type {StrTy {}};
 }
 
