@@ -105,12 +105,14 @@ Type type_of(Rtns rtns) {
 Rtns Blck::chck(Rtns expd, Defs& defs, SymT& symt) {
 
     // Scan through the statements and check their return behavior.
-    for (Stmt_ptr stmt : stmts) {
+    for (Stmt_ptr stmt : stmts) { // Inspect the block line by line...
 
         // Check this statement.
         [[maybe_unused]]
         Rtns stmt_rtns = stmt->chck(expd, defs, symt);
 
+		//if(stmt_rtrns)
+//TODO: this 
         // Tosses out return behavior. Fix this !!!!
     }
 
@@ -449,4 +451,3 @@ Type FCll::chck(Defs& defs, SymT& symt) {
     // Fix this!!!
     return Type {NoneTy {}}; // Fix this!!
 }
-
