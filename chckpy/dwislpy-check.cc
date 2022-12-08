@@ -121,9 +121,9 @@ Rtns Asgn::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
     if (!symt.has_info(name)) {
         throw DwislpyError(where(), "Variable '" + name + "' never introduced.");
     }
-    Type name_ty = symt.get_info(name)->type;
+    Type name_ty = symt.get_info(name)->type; // Look at symt to see what info is recorded for type of this variable.
     Type expn_ty = expn->chck(defs,symt);
-    if (name_ty != expn_ty) {
+    if (name_ty != expn_ty) { // The type stored in symt better match the type deduced by the expn->chck...
         std::string msg = "Type mismatch. Expected expression of type ";
         msg += type_name(name_ty) + ".";
         throw DwislpyError {expn->where(), msg};
@@ -146,8 +146,14 @@ Rtns Ntro::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
     return Rtns {Void {}}; // add the name to the symt (sym table) and check if type of expression is same as type of introduced thing
 }
 
-Rtns FRtn::chck(Rtns expd, Defs& defs, SymT& symt) {
+Rtns FRtn::chck(Rtns expd, Defs& defs, SymT& symt) { // Function return
     // Doesn't check the sub-expression. Fix this!!!....
+	Type subexp_ty = expn->chck(defs, symt);
+	Type expd_ty = type_of(expd);
+	if(subexp_ty != expd_ty){
+		std::string msg = "Type mismatch: returned type inconsistent with expected type.";
+		throw DwislpyError { where(), msg };
+	}
     return expd;
 }
 
@@ -178,7 +184,19 @@ Rtns PCll::chck([[maybe_unused]] Rtns expd, Defs& defs, SymT& symt) {
 Rtns IfEl::chck(Rtns expd, Defs& defs, SymT& symt) {
     //
     // This should check that the condition is a bool.
+	Type cndn_ty = cndn->chck(defs, symt);
+	if(!is_bool(cndn_ty)){
+		std::string msg = "Type Error: IfElse condition is not bool!";
+		throw DwislpyError(where(), msg);
+	}
     // It should check each of the two blocks return behavior.
+	Rtns then_blck_rtn = then_blck ->chck(defs, symt);
+	Rtns else_blck_rtn = else_blck ->chck(defs, symt);
+//	Rtns summary = then_blck_rtn && else_blck_rtn;
+//	if(else_blck_rtn == then_blck_rtn){
+//
+//	}
+		// The above four lines all give me errors... I can't even == compare two Rtns :^(
     // It should summarize the return behavior.
     //
     return Rtns {Void {}}; // Fix this!!!
@@ -188,9 +206,17 @@ Rtns IfEl::chck(Rtns expd, Defs& defs, SymT& symt) {
 Rtns Whle::chck(Rtns expd, Defs& defs, SymT& symt) {
     //
     // This should check that the condition is a bool.
+	Type cndn_ty = cndn->chck(defs, symt);
+	if(!is_bool(cndn_ty)){
+		std::string msg = "Type Error: While condition is not bool!";
+		throw DwislpyError(where(), msg);
+	}
     // It should check the block's return behavior.
+	Rtns  blck_rtn = blck->chck(defs, symt);
     // It should summarize the return behavior. It shouldv be Void
     // or VoidOr because loop bodies don't always execute.
+		//... Isn't blck_rtn already "summarized" return behavior? there's only one blck to *have* behavior, how much more can we summarize...
+			// Should we check whether it *isn't* Void/VoidOr??
     return Rtns {Void {}}; // Fix this!!!
 }
 
@@ -345,7 +371,7 @@ Type Not::chck(Defs& defs, SymT& symt) {
 		return Type {BoolTy {}};
 	} else if (is_str(left_ty) && is_str(rght_ty)) {
 		return Type {BoolTy {}};
-	}else if (is_bool(left_ty) && is_bool(rght_ty)) { 
+	}else if (is_bool(left_ty) && is_bool(rght_ty)) {
 		return Type {BoolTy {}};
 	} else {
 		std::string msg = "Wrong operand types for Not check.";
